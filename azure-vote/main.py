@@ -32,24 +32,24 @@ config_integration.trace_integrations(['logging'])
 config_integration.trace_integrations(['requests'])
 logger = logging.getLogger(__name__)
 
-handler = AzureLogHandler(connection_string='InstrumentationKey=6f6da3c3-1416-4b30-bcb3-d6685260643c')
+handler = AzureLogHandler(connection_string='InstrumentationKey=f7b898e4-6f5a-42b7-bcf1-8f24c3eeed18')
 handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
 logger.addHandler(handler)
 
-logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=6f6da3c3-1416-4b30-bcb3-d6685260643c'))
+logger.addHandler(AzureEventHandler(connection_string='InstrumentationKey=f7b898e4-6f5a-42b7-bcf1-8f24c3eeed18'))
 logger.setLevel(logging.INFO)
 
 # Metrics
 exporter = metrics_exporter.new_metrics_exporter(
   enable_standard_metrics=True,
-  connection_string='InstrumentationKey=6f6da3c3-1416-4b30-bcb3-d6685260643c')
+  connection_string='InstrumentationKey=f7b898e4-6f5a-42b7-bcf1-8f24c3eeed18')
 
 view_manager.register_exporter(exporter)
 
 # Tracing
 tracer = Tracer(
     exporter=AzureExporter(
-        connection_string='InstrumentationKey=6f6da3c3-1416-4b30-bcb3-d6685260643c'),
+        connection_string='InstrumentationKey=f7b898e4-6f5a-42b7-bcf1-8f24c3eeed18'),
     sampler=ProbabilitySampler(1.0),
 )
 app = Flask(__name__)
@@ -57,7 +57,7 @@ app = Flask(__name__)
 # Requests
 middleware = FlaskMiddleware(
     app,
-    exporter=AzureExporter(connection_string="InstrumentationKey=6f6da3c3-1416-4b30-bcb3-d6685260643c"),
+    exporter=AzureExporter(connection_string="InstrumentationKey=f7b898e4-6f5a-42b7-bcf1-8f24c3eeed18"),
     sampler=ProbabilitySampler(rate=1.0)
 )
 
@@ -80,9 +80,9 @@ else:
     title = app.config['TITLE']
 
 # Redis Connection to a local server running on the same machine where the current FLask app is running. 
-r = redis.Redis()
+#r = redis.Redis()
 
-"""redis_server = os.environ['REDIS']
+redis_server = os.environ['REDIS']
 
 # Redis Connection to another container
 try:
@@ -95,7 +95,7 @@ try:
     r.ping()
 except redis.ConnectionError:
     exit('Failed to connect to Redis, terminating.')
-"""
+
 # Change title to host name to demo NLB
 if app.config['SHOWHOST'] == "true":
     title = socket.gethostname()
